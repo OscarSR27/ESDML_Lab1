@@ -179,13 +179,18 @@ def estimate_rom(tensors: List[MyTensor]):
 
     rom_bytes = 0
 
-    ### ENTER STUDENT CODE BELOW ###
-
-    # considering model weights and biases
-    # rom_bytes = weights + biases
-    #           = (tensor_size * 1 byte(considered model will be quantized)
-
-    ### ENTER STUDENT CODE ABOVE ###
+    # Iterate over each tensor
+    for tensor in tensors:
+        # Check if the tensor is a constant tensor (this means is stored in ROM)
+        if tensor.is_const:
+            # Calculate the size of the tensor based on its shape and data type
+            tensor_size = np.prod(tensor.shape)  # Total number of elements in the tensor
+            if tensor.dtype == 'int8':
+                rom_bytes += tensor_size  # Each int8 element is 1 byte
+            elif tensor.dtype == 'int32':
+                rom_bytes += tensor_size * 4  # Each int32 element is 4 bytes
+            elif tensor.dtype == 'float32':
+                rom_bytes += tensor_size * 4  # Each float32 element is 4 bytes
 
     return rom_bytes
 
@@ -217,8 +222,37 @@ def estimate_ram(tensors: List[MyTensor], layers: List[MyLayer]):
 
     ram_bytes = 0
 
-    ### ENTER STUDENT CODE BELOW ###
+    # Iterate over each layer to calculate the RAM usage.
+    for layer in layers:
+        
+        input_size = 0
+        output_size = 0
 
-    ### ENTER STUDENT CODE ABOVE ###
+        # Find the input tensor by its ID and calculate its size
+        for tensor in tensors:
+            if tensor.idx == layer.inputs[0]:
+                input_size = np.prod(tensor.shape) * np.dtype(tensor.dtype).itemsize
+                break 
+            
+        # Find the output tensor by its ID and calculate its size
+        for tensor in tensors:
+            if tensor.idx == layer.outputs[0]:
+                output_size = np.prod(tensor.shape) * np.dtype(tensor.dtype).itemsize
+                break 
+
+        # Calculate the RAM required for the current layer's input and output tensor.
+        current_layer_ram = input_size + output_size
+
+        # Update the maximum RAM usage if the current layer requires more than what we've seen before.
+        ram_bytes = max(ram_bytes, current_layer_ram)
 
     return ram_bytes
+
+def get_dtype_size(dtype: str) -> int:
+    """Get the size of the data type in bytes."""
+    if dtype == 'int8':
+        return 1
+    elif dtype == 'int32' or dtype == 'float32':
+        return 4
+    else:
+        raise ValueError(f"Unknown dtype: {dtype}")
