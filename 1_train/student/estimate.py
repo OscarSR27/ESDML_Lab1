@@ -230,13 +230,13 @@ def estimate_ram(tensors: List[MyTensor], layers: List[MyLayer]):
 
         # Find the input tensor by its ID and calculate its size
         for tensor in tensors:
-            if tensor.idx == layer.inputs[0]:
+            if tensor.idx == layer.inputs[0] and not tensor.is_const:
                 input_size = np.prod(tensor.shape) * np.dtype(tensor.dtype).itemsize
                 break 
             
         # Find the output tensor by its ID and calculate its size
         for tensor in tensors:
-            if tensor.idx == layer.outputs[0]:
+            if tensor.idx == layer.outputs[0] and not tensor.is_const:
                 output_size = np.prod(tensor.shape) * np.dtype(tensor.dtype).itemsize
                 break 
 
