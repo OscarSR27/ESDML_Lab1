@@ -40,17 +40,16 @@ def create_micro_kws_student_model(
     x = tf.keras.layers.Conv2D(
         filters=32,
         kernel_size=(5,4), 
+        dilation_rate=(1,1),
         strides=(1,1),
         padding="SAME",
         activation="relu"
         )(x)
     
-    # x = tf.keras.layers.MaxPooling2D(
-    #     pool_size=(3,3),
-    #     strides=None,
-    #     padding='valid',
-    #     data_format=None
-    # )(x)
+    x = tf.quantization.fake_quant_with_min_max_args(x,
+                                                     min = -6,
+                                                     max = 6, 
+                                                     num_bits= 8)
     
     x = tf.keras.layers.DepthwiseConv2D(
         depth_multiplier=1,
@@ -60,6 +59,13 @@ def create_micro_kws_student_model(
         activation="relu",
     )(x)
     
+    x = tf.quantization.fake_quant_with_min_max_args(x,
+                                                     min = -6,
+                                                     max = 6, 
+                                                     num_bits= 8)
+    
+    
+    
     x = tf.keras.layers.Conv2D(
         filters=32,
         kernel_size=1, 
@@ -67,6 +73,12 @@ def create_micro_kws_student_model(
         padding="SAME",
         activation="relu"
         )(x)
+
+    x = tf.quantization.fake_quant_with_min_max_args(x,
+                                                     min = -6,
+                                                     max = 6, 
+                                                     num_bits= 8)
+    
 
     x = tf.keras.layers.DepthwiseConv2D(
         depth_multiplier=4,
@@ -76,17 +88,78 @@ def create_micro_kws_student_model(
         activation="relu",
     )(x)
 
+    x = tf.quantization.fake_quant_with_min_max_args(x,
+                                                     min = -6,
+                                                     max = 6, 
+                                                     num_bits= 8)
+    
+
     x = tf.keras.layers.Conv2D(
-        filters=23,
+        filters=32,
         kernel_size=1, 
         strides=(1,1),
         padding="SAME",
         activation="relu"
         )(x)
 
-    # Flatten for fully connected layers.
-    x = tf.keras.layers.Flatten()(x)
+    x = tf.quantization.fake_quant_with_min_max_args(x,
+                                                     min = -6,
+                                                     max = 6, 
+                                                     num_bits= 8)
+    
+    
+    x = tf.keras.layers.MaxPooling2D(
+        pool_size=(3,3),
+        strides=None,
+        padding='valid',
+        data_format=None
+    )(x)
 
+    x = tf.quantization.fake_quant_with_min_max_args(x,
+                                                     min = -6,
+                                                     max = 6, 
+                                                     num_bits= 8)
+    
+    
+
+    x = tf.keras.layers.Conv2D(
+        filters=16,
+        kernel_size=1, 
+        strides=(1,1),
+        padding="SAME",
+        activation="relu"
+        )(x)
+ 
+ 
+    x = tf.quantization.fake_quant_with_min_max_args(x,
+                                                     min = -6,
+                                                     max = 6, 
+                                                     num_bits= 8)
+    
+    
+    # x = tf.keras.layers.MaxPooling2D(
+    #     pool_size=(3,3),
+    #     strides=None,
+    #     padding='valid',
+    #     data_format=None
+    # )(x)
+
+
+    # x = tf.quantization.fake_quant_with_min_max_args(x,
+    #                                                  min = -6,
+    #                                                  max = 6, 
+    #                                                  num_bits= 8)
+    
+    
+    # Flatten    for fully connected layers.
+    x = tf.keras.layers.Flatten()(x)
+    
+    x = tf.quantization.fake_quant_with_min_max_args(x,
+                                                     min = -6,
+                                                     max = 6, 
+                                                     num_bits= 8)
+    
+    
     # Output fully connected.
     output = tf.keras.layers.Dense(units=model_settings["label_count"], activation="softmax")(x)
 
