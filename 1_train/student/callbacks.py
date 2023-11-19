@@ -18,9 +18,19 @@ def get_early_stopping_callback() -> Optional[tf.keras.callbacks.Callback]:
         The created callback.
     """
 
-    callback = tf.keras.callbacks.EarlyStopping(monitor='loss', patience=10)
+    callback = None
 
     ### ENTER STUDENT CODE BELOW ###
+    callback = tf.keras.callbacks.EarlyStopping(
+        monitor="val_loss",
+        min_delta=0,
+        patience=10,
+        verbose=0,
+        mode="auto",
+        baseline=None,
+        restore_best_weights=False,
+        start_from_epoch=10,
+    )
 
     ### ENTER STUDENT CODE ABOVE ###
 

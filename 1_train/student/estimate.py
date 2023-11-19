@@ -60,7 +60,9 @@ def estimate_conv2d_macs(in_shape: List[int], kernel_shape: List[int], out_shape
     macs = 0
 
     ### ENTER STUDENT CODE BELOW ###
-    macs = kernel_ic * kernel_oc * (input_h * input_w)
+    mul_per_kernel = kernel_h * kernel_w * kernel_ic
+    macs = mul_per_kernel * output_c * output_h * output_w * output_n
+    print(macs)
     ### ENTER STUDENT CODE ABOVE ###
 
     return macs
@@ -106,7 +108,8 @@ def estimate_depthwise_conv2d_macs(
     macs = 0
 
     ### ENTER STUDENT CODE BELOW ###
-    macs = kernel_oc * (input_h * input_w)
+    macs = output_n *  output_c * (output_h * output_w) * (kernel_h * kernel_w)
+    print(macs)
     ### ENTER STUDENT CODE ABOVE ###
 
     return macs
@@ -150,7 +153,7 @@ def estimate_fully_connected_macs(
     macs = 0
 
     ### ENTER STUDENT CODE BELOW ###
-    macs = filter_h * filter_w
+    macs = filter_h * filter_w * output_h 
     ### ENTER STUDENT CODE ABOVE ###
 
     return macs
@@ -179,6 +182,7 @@ def estimate_rom(tensors: List[MyTensor]):
 
     rom_bytes = 0
 
+    ### ENTER STUDENT CODE BELOW ###
     # Iterate over each tensor
     for tensor in tensors:
         # Check if the tensor is a constant tensor (this means is stored in ROM)
@@ -193,7 +197,7 @@ def estimate_rom(tensors: List[MyTensor]):
                 rom_bytes += tensor_size * 4  # Each float32 element is 4 bytes
 
     return rom_bytes
-
+    ### ENTER STUDENT CODE ABOVE ###
 
 def estimate_ram(tensors: List[MyTensor], layers: List[MyLayer]):
     """Calculate the estimated number of bytes required to store model tensors in RAM.
@@ -222,6 +226,7 @@ def estimate_ram(tensors: List[MyTensor], layers: List[MyLayer]):
 
     ram_bytes = 0
 
+    ### ENTER STUDENT CODE BELOW ###    
     # Iterate over each layer to calculate the RAM usage.
     for layer in layers:
         
@@ -245,7 +250,8 @@ def estimate_ram(tensors: List[MyTensor], layers: List[MyLayer]):
 
         # Update the maximum RAM usage if the current layer requires more than what we've seen before.
         ram_bytes = max(ram_bytes, current_layer_ram)
-
+    ### ENTER STUDENT CODE ABOVE ###
+    
     return ram_bytes
 
 def get_dtype_size(dtype: str) -> int:
