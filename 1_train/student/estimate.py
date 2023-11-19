@@ -60,9 +60,10 @@ def estimate_conv2d_macs(in_shape: List[int], kernel_shape: List[int], out_shape
     macs = 0
 
     ### ENTER STUDENT CODE BELOW ###
-    mul_per_kernel = kernel_h * kernel_w * kernel_ic
-    macs = mul_per_kernel * output_c * output_h * output_w * output_n
-    print(macs)
+    # Multiplication per output 'pixel'
+    mul_per_ouput = kernel_h * kernel_w * kernel_ic
+    # Propergate through the ouput 
+    macs = mul_per_ouput * (output_n * output_c * output_h * output_w) 
     ### ENTER STUDENT CODE ABOVE ###
 
     return macs
@@ -108,8 +109,10 @@ def estimate_depthwise_conv2d_macs(
     macs = 0
 
     ### ENTER STUDENT CODE BELOW ###
-    macs = output_n *  output_c * (output_h * output_w) * (kernel_h * kernel_w)
-    print(macs)
+    # Muplication per output 'pixel' 
+    mul_per_ouput = kernel_h * kernel_w
+    # NOTE: it looks different but the channel output here includes the channel mul
+    macs = (output_n *  output_c * output_h * output_w) * mul_per_ouput
     ### ENTER STUDENT CODE ABOVE ###
 
     return macs
@@ -153,7 +156,7 @@ def estimate_fully_connected_macs(
     macs = 0
 
     ### ENTER STUDENT CODE BELOW ###
-    macs = filter_h * filter_w * output_h 
+    macs = filter_h * filter_w 
     ### ENTER STUDENT CODE ABOVE ###
 
     return macs
