@@ -60,7 +60,7 @@ def estimate_conv2d_macs(in_shape: List[int], kernel_shape: List[int], out_shape
     macs = 0
 
     ### ENTER STUDENT CODE BELOW ###
-
+    macs = kernel_ic * kernel_oc * (input_h * input_w)
     ### ENTER STUDENT CODE ABOVE ###
 
     return macs
@@ -106,7 +106,7 @@ def estimate_depthwise_conv2d_macs(
     macs = 0
 
     ### ENTER STUDENT CODE BELOW ###
-
+    macs = kernel_oc * (input_h * input_w)
     ### ENTER STUDENT CODE ABOVE ###
 
     return macs
@@ -150,7 +150,7 @@ def estimate_fully_connected_macs(
     macs = 0
 
     ### ENTER STUDENT CODE BELOW ###
-
+    macs = filter_h * filter_w
     ### ENTER STUDENT CODE ABOVE ###
 
     return macs
