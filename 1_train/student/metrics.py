@@ -24,6 +24,10 @@ def recall(matrix: tf.Tensor, idx: int) -> tf.Tensor:
     recall = None
 
     ### ENTER STUDENT CODE BELOW ###
+    
+    true_positives = matrix[idx, idx]
+    false_negatives = tf.reduce_sum(matrix[idx, :]) - true_positives
+    recall = true_positives / (true_positives + false_negatives)
 
     ### ENTER STUDENT CODE ABOVE ###
 
@@ -49,6 +53,10 @@ def precision(matrix: tf.Tensor, idx: int) -> tf.Tensor:
     precision = None
 
     ### ENTER STUDENT CODE BELOW ###
+    
+    true_positives = matrix[idx, idx]
+    false_positives = tf.reduce_sum(matrix[:, idx]) - true_positives
+    precision = true_positives / (true_positives + false_positives)
 
     ### ENTER STUDENT CODE ABOVE ###
 
@@ -74,6 +82,10 @@ def f1_score(matrix: tf.Tensor, idx: int) -> tf.Tensor:
     f1_score = None
 
     ### ENTER STUDENT CODE BELOW ###
+    
+    prec = precision(matrix, idx)
+    rec = recall(matrix, idx)
+    f1_score = 2 * (prec * rec) / (prec + rec)
 
     ### ENTER STUDENT CODE ABOVE ###
 
