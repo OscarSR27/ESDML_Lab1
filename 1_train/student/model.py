@@ -51,8 +51,20 @@ def create_micro_kws_student_model(
                                                      max = 6, 
                                                      num_bits= 8)
     
+    x = tf.keras.layers.MaxPooling2D(
+        pool_size=(2,2),
+        strides=(2,2),
+        padding='valid',
+        data_format=None
+    )(x)
+
+    x = tf.quantization.fake_quant_with_min_max_args(x,
+                                                     min = -6,
+                                                     max = 6, 
+                                                     num_bits= 8)
+    
     x = tf.keras.layers.DepthwiseConv2D(
-        depth_multiplier=1,
+        depth_multiplier=4,
         kernel_size=(5, 4),
         strides=(2, 2),
         padding="SAME",
@@ -65,7 +77,7 @@ def create_micro_kws_student_model(
                                                      num_bits= 8)
     
     
-    
+    # 1x1 to reduce dim
     x = tf.keras.layers.Conv2D(
         filters=32,
         kernel_size=1, 
@@ -79,6 +91,18 @@ def create_micro_kws_student_model(
                                                      max = 6, 
                                                      num_bits= 8)
     
+    
+    x = tf.keras.layers.MaxPooling2D(
+        pool_size=(2,2),
+        strides=(2,2),
+        padding='valid',
+        data_format=None
+    )(x)
+
+    x = tf.quantization.fake_quant_with_min_max_args(x,
+                                                     min = -6,
+                                                     max = 6, 
+                                                     num_bits= 8)
 
     x = tf.keras.layers.DepthwiseConv2D(
         depth_multiplier=4,
@@ -109,8 +133,8 @@ def create_micro_kws_student_model(
     
     
     x = tf.keras.layers.MaxPooling2D(
-        pool_size=(3,3),
-        strides=None,
+        pool_size=(2,2),
+        strides=(2,2),
         padding='valid',
         data_format=None
     )(x)
@@ -123,7 +147,7 @@ def create_micro_kws_student_model(
     
 
     x = tf.keras.layers.Conv2D(
-        filters=16,
+        filters=32,
         kernel_size=1, 
         strides=(1,1),
         padding="SAME",
