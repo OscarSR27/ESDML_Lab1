@@ -3,7 +3,7 @@ from pathlib import Path
 from zipfile import ZipFile
 
 NUM_WORDS = 8
-MODEL_NAME = "micro_kws_student"
+MODEL_NAME = "kws_model_student"
 
 
 def get_lines(file):
