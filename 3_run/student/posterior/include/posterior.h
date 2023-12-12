@@ -37,7 +37,7 @@
 #endif
 
 #ifndef CONFIG_MICRO_KWS_NUM_CLASSES
-#define CONFIG_MICRO_KWS_NUM_CLASSES 4
+#define CONFIG_MICRO_KWS_NUM_CLASSES 10
 #endif
 
 class PosteriorHandler {
